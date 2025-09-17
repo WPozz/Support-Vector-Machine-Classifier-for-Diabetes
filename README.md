@@ -8,9 +8,10 @@ The repository includes:
 - Model Evaluation: Provides detailed performance analysis using confusion matrices, classification reports, and a comparison against a majority class baseline, with a focus on     Balanced Accuracy for imbalanced datasets.
 
 The projects values model Interpretability as it explains the model's decisions using advanced techniques:
-    - Permutation Importance: Ranks features by their impact on model performance.
-    - SHAP (SHapley Additive exPlanations): Explains individual predictions by showing each feature's contribution.
-    - Partial Dependence Plots (PDPs): Visualizes the marginal effect of features on the predicted outcome.
+    
+- Permutation Importance: Ranks features by their impact on model performance.
+- SHAP (SHapley Additive exPlanations): Explains individual predictions by showing each feature's contribution.
+- Partial Dependence Plots (PDPs): Visualizes the marginal effect of features on the predicted outcome.
 
 There's also a dedicated clinical relevance section that evaluates the model using clinical metrics like Sensitivity, Specificity, PPV, and NPV. The section is coupled with a cost-benefit analysis and a risk stratification framework for real-world application.
 
