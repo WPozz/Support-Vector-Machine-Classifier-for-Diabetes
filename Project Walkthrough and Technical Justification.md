@@ -184,7 +184,8 @@ To add further layers of rigor and understanding, several advanced analyses were
 
 The final sections translate the model's performance into a practical context.
 
-*   **Clinical Impact:** A summary of clinical performance metrics (Sensitivity, Specificity, PPV, NPV) was generated using the **optimized decision threshold**. This provides a realistic assessment of how the model would perform in a clinical setting. A cost-benefit analysis was also included to illustrate the potential economic impact of the model.
+*   **Clinical Impact:** A summary of clinical performance metrics (Sensitivity, Specificity, PPV, NPV) was generated using the **optimized decision threshold**. This provides a realistic assessment of how the model would perform in a clinical setting. A cost-benefit analysis was also included to illustrate the potential economic impact of the model. The cost benefit analysis was performed using "[Screening for diabetes and prediabetes should be cost-saving in patients at high risk](https://pubmed.ncbi.nlm.nih.gov/23393215/)"
+
 
 *   **Deployment Preparation:** The final step involved preparing the model for deployment. All necessary components—the trained `Pipeline` object (model + scaler), feature names, and, critically, the **recommended decision threshold**—were packaged into a single `pickle` file. A sample prediction function was written to demonstrate how this complete artifact could be used to score new patient data in a real-world application.
 
