@@ -90,7 +90,19 @@ Initial model results were critically evaluated for both performance and general
 
 *   **Primary Metric - Balanced Accuracy:** Given the clinical context, model performance was primarily evaluated using **Balanced Accuracy**. This metric was chosen over standard accuracy because it provides a more reliable measure on potentially imbalanced datasets by averaging sensitivity (recall) and specificity.
 
+<img width="846" height="651" alt="immagine" src="https://github.com/user-attachments/assets/1638fdfc-0a32-44a6-ae4a-c73e74099098" />
+
+**Note:** The three models were compared to the majority classifier. The Radial and Polynomial models show an outstanding balanced accuracy. This should raise suspect as it's the first sign of overfitting.
+
 *   **Overfitting Diagnosis with Learning Curves:** Learning curves were plotted for each of the three tuned models. This diagnostic tool plots model performance on the training and cross-validation sets as a function of training sample size. The analysis clearly revealed that while the Linear SVM was stable, the RBF and initial Polynomial models, despite higher training scores, exhibited significant overfitting, characterized by a large gap between the training and cross-validation performance curves.
+
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/dfd10e23-ed6b-4ed7-84c9-42768be10ee4" />
+
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/ee46a569-cf31-4f0e-b4bc-c35fd3c6105d" />
+
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/01feec0a-7362-43cf-bfff-90b6f77d5611" />
+
+The Linear SVM model shows a continuous overlapping between the training score and the CV score. This indicates an healthy model. The radial SVM is clearly overfitting as the training score curve is fixed at 1 while the CV-score curve reaches > 0.95 with as the training set size increases. The Polynomial plot is more promissing than the Radial SVM as the training score tends to decrease while the CV-score increases. Nevertheless, they both are overfitting. 
 
 **Choice Justification:** This two-pronged validation strategy is crucial. Relying on a single performance metric can be misleading. Learning curves provide invaluable insight into the bias-variance tradeoff, and in this case, they correctly diagnosed overfitting as the key problem to be solved in the next stage.
 
@@ -104,21 +116,34 @@ Based on the validation results, the Polynomial SVM was selected for further ref
 
 *   **Three-Level Regularization Strategy:** To systematically combat overfitting, a three-level regularization experiment (Low, Medium, Hard) was designed. This involved tuning the regularization parameter `C` over different ranges to control model complexity.
 
+<img width="1189" height="690" alt="immagine" src="https://github.com/user-attachments/assets/36adc18e-51c4-425f-9ac8-4ede60bfb53a" />
+
 *   **Final Model Selection:** The final model was selected based on the regularization level (`Hard`) that **minimized the gap** between cross-validation and test accuracy, as visualized in its learning curve. This model demonstrated the best generalization, with a final gap of only 0.023.
 
-**Choice Justification:** This iterative and methodical approach to tuning and regularization is a cornerstone of effective machine learning. Instead of accepting an overfit model, the problem was diagnosed and systematically addressed, leading to a final model that is robust and trustworthy.
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/121e33b6-8ff6-4180-bf03-78ab03ceee6d" />
+
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/1f0de008-e036-4ad2-8c34-7069321a655b" />
+
+<img width="988" height="590" alt="immagine" src="https://github.com/user-attachments/assets/0cb7f7ae-94d4-4e2b-8dbf-453c045618c1" />
+
+**Choice Justification:** This iterative and methodical approach to tuning and regularization is a cornerstone of effective machine learning. Instead of accepting an overfit model, the problem was diagnosed and systematically addressed, leading to a final model that is robust and trustworthy. This is probably the most debateble part of the project; the fine-tuning grid for each model was quite "modest" to find a trade-off between optimization and computational power. 
+
+**Note:** The Fine-Tuned and Regularized model shows a balanced accuracy value close to the linear model. However, while the sensitivity values of the two are quite comparable (54% vs 52%) the specificity of the regularized model is far higher (94.8% vs 88.8%). 
 
 ---
 
 ### 7. Threshold Tuning for Clinical Utility
 
-A model that generalizes well is only useful if its predictions are actionable. The final, regularized model, at the default 0.5 decision threshold, yielded high specificity (94.9%) but a clinically insufficient sensitivity (52.8%), meaning it would miss nearly half of all patients with diabetes.
+A model that generalizes well is only useful if its predictions are actionable. The final, regularized model, at the default 0.5 decision threshold, yielded high specificity (94.8%) but a clinically insufficient sensitivity (52.8%), meaning it would miss nearly half of all patients with diabetes.
 
 *   **Methodology:** To address this, a threshold-tuning analysis was performed. By calculating sensitivity and specificity across a range of decision thresholds (from 0.1 to 0.95), the trade-off between the two metrics was visualized. The optimal threshold was identified using **Youden's J Index**, which finds the point that maximizes the sum of sensitivity and specificity.
 
-*   **Outcome:** This analysis resulted in the selection of a new, **recommended threshold of 0.30**. This achieved a much more clinically desirable trade-off, boosting sensitivity to **73.8%** while maintaining a strong specificity of **79.1%**.
+*   **Outcome:** This analysis resulted in the selection of a new, **recommended threshold of 0.30**. This achieved a much more clinically desirable trade-off, boosting sensitivity to **75.2%** while maintaining a strong specificity of **78.9%**. 
 
 **Choice Justification:** This is arguably the most critical step in the project. It demonstrates an understanding that a model's output must be calibrated to its real-world application. For a clinical screening tool, improving the detection rate of sick patients (sensitivity) is often worth a calculated decrease in specificity.
+
+<img width="1489" height="590" alt="immagine" src="https://github.com/user-attachments/assets/fc93d18a-08de-4672-b5f8-35ad1ec864a9" />
+
 
 ---
 
@@ -126,15 +151,30 @@ A model that generalizes well is only useful if its predictions are actionable. 
 
 To add further layers of rigor and understanding, several advanced analyses were performed on the final, regularized model.
 
-*   **Statistical Significance Testing:** The **Wilcoxon signed-rank test** was used to perform pairwise comparisons of the cross-validation scores of the different models. This confirmed that the performance improvements of the final regularized model over simpler baselines (like the Linear SVM) were statistically significant (p < 0.05).
+*   **Statistical Significance Testing:** The **Wilcoxon signed-rank test** was used to perform pairwise comparisons of the cross-validation scores of the different models. This confirmed that the performance improvements of the final regularized model over simpler baselines (like the Linear SVM) were statistically significant (p < 0.05). It's worth noting that no statistical mean difference was found between the models.
 
 *   **Model Interpretability (XAI):**
     *   **Permutation Importance:** This technique was used to identify the most influential features by measuring how much model performance decreases when a single feature's values are randomly shuffled.
+
+        <img width="1005" height="547" alt="immagine" src="https://github.com/user-attachments/assets/29cf8e99-3e5e-4e1e-9203-1b3cfe696260" />
+
+      
     *   **SHAP (SHapley Additive exPlanations):** SHAP analysis was used to provide detailed, instance-level explanations of the model's predictions, showing exactly how each feature contributed to the final probability score for a given patient. Both summary and individual force plots were generated.
 
+        <img width="790" height="459" alt="immagine" src="https://github.com/user-attachments/assets/2baa8b66-5552-43f0-a018-f0461ffb71f3" />
+
+        <img width="777" height="459" alt="immagine" src="https://github.com/user-attachments/assets/865cd209-8ff7-401d-9e62-9ef6f524aff3" />
+
+        
 *   **Calibration Analysis:** A calibration curve was plotted to assess whether the model's predicted probabilities were reliable (e.g., if the model predicts 80% probability, does that class appear 80% of the time?). The **Brier score** was calculated as a quantitative measure of calibration.
 
+    <img width="1189" height="790" alt="immagine" src="https://github.com/user-attachments/assets/1850f52b-0774-4fbf-bacf-7d481e2f07d9" />
+
 *   **Partial Dependence Plots (PDP):** PDPs were generated for the top features to visualize the marginal effect of each feature on the model's predicted outcome, helping to understand *how* the model makes its decisions.
+
+    <img width="1489" height="1180" alt="immagine" src="https://github.com/user-attachments/assets/4e3c6274-bc46-49be-adab-20b29ecf3574" />
+
+    <img width="990" height="790" alt="immagine" src="https://github.com/user-attachments/assets/708267dd-ab5f-4744-9ccf-2372d6534a4b" />
 
 **Choice Justification:** These advanced techniques move the project beyond a simple prediction task. They ensure the model is not only accurate but also **rigorous**, **interpretable**, **reliable**, and **transparent**—all essential qualities for models used in a biomedical context.
 
